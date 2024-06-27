@@ -1,13 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="https://cdn.tailwindcss.com"></script>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Snake Game</title>
+    <title>Term.ooo localhost clone</title>
   </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="h-screen w-screen flex flex-row items-center justify-center">
+    <div
+      id="game-start"
+      class="w-[100%] flex flex-row items-center justify-center"
+    >
+      <input
+        id="wordInput"
+        class="text-center text-lg font-mono font-bold w-[20%] p-4 rounded-xl border-2 border-gray-700 placeholder:text-sm"
+        type="text"
+        placeholder="Adicione uma palavra para adivinhar"
+      />
+      <button
+        onclick="addWord()"
+        class="border-gray-600 border-2 transition-colors: hover:bg-green-400 rounded-xl p-4 ml-4 bg-green-500"
+      >
+        Adicionar
+      </button>
+    </div>
+    <table id="word-attempts">
+      <tr id="word"></tr>
+    </table>
+    <script>
+      let word = "";
+      let currentFocus = 1;
+
+      const addWord = () => {
+        word = document.getElementById("wordInput").value;
+        if (word != "" && word.length > 0) {
+          document.querySelector("#game-start").style.display = "none";
+          if (word.length > 0) {
+            for (let i = 1; i <= word.length; i++) {
+              document.querySelector(
+                "#word"
+              ).innerHTML += `<td id="letter-${i}"><input id="input-${i}" maxlength="1" type="text" class="max-w-16 h-16 text-center text-lg font-mono font-bold  rounded-xl border-2 border-gray-700 placeholder:text-sm"></td>`;
+            }
+          }
+        }
+
+        if (word != "" && word.length > 0) {
+          for (let i = 1; i <= word.length; i++) {
+            const element = document.getElementById(`input-${i}`);
+            element.addEventListener("keyup", (event) => {
+              if (String(element.value).length >= 1) {
+                document.getElementById(`input-${i + 1}`).focus();
+              }
+              if (word.includes(element.value)) {
+                document.getElementById(`input-${i}`).style.backgroundColor =
+                  "gray";
+              }
+              if (word[i - 1] == element.value) {
+                document.getElementById(`input-${i}`).style.backgroundColor =
+                  "green";
+              }
+              if (word.includes(element.value())) {
+                document.getElementById(`input-${i}`).style.backgroundColor =
+                  "white";
+              }
+            });
+          }
+        }
+      };
+    </script>
   </body>
 </html>
